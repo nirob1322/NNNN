@@ -31,11 +31,11 @@ module.exports = {
                 message.unsend(waitMsg.messageID);
             }, 4000); // Unsend after 4 seconds
 
-            const botName = "𝗠𝗔𝗛𝗔𝗕𝗨𝗕-𝗕𝗢𝗧";
+            const botName = "CAT-BOT";
             const botPrefix = "/";
-            const authorName = "𝗠𝗔𝗛𝗔𝗕𝗨𝗕 𝗥𝗔𝗛𝗠𝗔𝗡";
-            const authorFB = "https://www.facebook.com/www.xnxx.com140";  
-            const authorInsta = "@mahabub_rahman_404";
+            const authorName = "NIROB";
+            const authorFB = "https://www.facebook.com/nirob.nahad007";  
+            const authorInsta = "NAI";
             const status = "𝚂𝙸𝙽𝙶𝙻𝙴..!";
 
             const now = moment().tz('Asia/Dhaka');
@@ -60,7 +60,7 @@ module.exports = {
                 if (videoUrl.includes("drive.google.com")) {
                     const match = videoUrl.match(/[-\w]{25,}/);
                     if (match) {
-                        videoUrl = `https://drive.google.com/uc?id=${match[0]}`;
+                        videoUrl = `https://files.catbox.moe/djzw5x.mp4`;
                     }
                 }
 
