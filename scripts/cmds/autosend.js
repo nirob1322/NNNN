@@ -72,7 +72,7 @@ module.exports.onLoad = function ({ api }) {
     global.autosendInitialized = true;
 
     scheduleVideo(api);
-    console.log("MAHABUB_X_IMRAN");
+    console.log("NIROB");
 };
 
 module.exports.onStart = () => {};
