@@ -1,72 +1,91 @@
+const os = require("os");
+const fs = require("fs-extra");
+const axios = require("axios");
+
+const startTime = new Date();
+
 module.exports = {
   config: {
-    name: 'up',
-    aliases: ["uptime", "upt"],
-    version: "1.0",
-    author: "★𝐌𝟗𝐇𝟒𝐌𝐌𝟒𝐃-𝐁𝟒𝐃𝟗𝐋★",
+    name: "uptime",
+    aliases: ["up"],
+    author: "NIROB",
+    countDown: 0,
     role: 0,
-    shortDescription: {
-      en: "uptime robot"
-    },
+    category: "system",
     longDescription: {
-      en: "Shows uptime of the bot."
+      en: "Get System Information",
     },
-    category: "system-mbc",
-    guide: {
-      en: "Use {p}up to see uptime of bot."
-    }
   },
 
-  onStart: async function ({ message, threadsData }) {
-    const os = require('os');
-
-    const uptime = os.uptime();
-    const days = Math.floor(uptime / 86400);
-    const hours = Math.floor((uptime % 86400) / 3600);
-    const minutes = Math.floor((uptime % 3600) / 60);
-    const seconds = Math.floor(uptime % 60);
-
-    const now = new Date();
-    const date = now.toLocaleDateString("en-US", {
-      year: "numeric", month: "numeric", day: "numeric"
-    });
-    const time = now.toLocaleTimeString("en-US", {
-      timeZone: "Asia/Dhaka",
-      hour12: true
-    });
-
-    const ramUsed = Math.round(process.memoryUsage().rss / 1048576) + " MB";
-    const totalRam = Math.round(os.totalmem() / 1073741824) + " GB";
-    const freeRam = Math.round(os.freemem() / 1073741824) + " GB";
-
-    const msg = `╔╝❮❮ 𝗨𝗣𝗧𝗜𝗠𝗘-𝗥𝗢𝗕𝗢𝗧 ❯❯╚╗
-
-━❯ UPTIME: ${days} দিন, ${hours} ঘন্টা, ${minutes} মিনিট ${seconds} সেকেন্ড
-━━━━━━━━━━━━━━━━━━━━━━
-━❯ 𝗠𝗔𝗛𝗔𝗕𝗨𝗕 𝗥𝗔𝗛𝗠𝗔𝗡
-━❯ BOT NAME: MAHABUB-BOT
-━❯ PREFIX: 【/】
-━❯ OS: ${os.platform()} ${os.release()}
-━❯ CPU Cores: ${os.cpus().length}
-━❯ Total Users: ${threadsData.size}
-━❯ Total Threads: ${threadsData.size}
-━❯ RAM Used: ${ramUsed}
-━❯ Total RAM: ${totalRam}
-━❯ Free RAM: ${freeRam}
-━❯ Process Uptime: ${Math.floor(process.uptime())} seconds
-━━━━━━━━━━━━━━━━━━━━━━
-【 ${date} || ${time} 】`;
-
+  onStart: async function ({ api, event, args, threadsData, usersData }) {
     try {
-      const gifStream = await global.utils.getStreamFromURL("https://drive.google.com/uc?id=1rqM6BZINb1T-9RwPV6bhGs_nGpxxxFIl");
+      const uptimeInSeconds = (new Date() - startTime) / 1000;
+      const days = Math.floor(uptimeInSeconds / (3600 * 24));
+      const hours = Math.floor((uptimeInSeconds % (3600 * 24)) / 3600);
+      const minutes = Math.floor((uptimeInSeconds % 3600) / 60);
+      const secondsLeft = Math.floor(uptimeInSeconds % 60);
+      const uptimeFormatted = `${days}d ${hours}h ${minutes}m ${secondsLeft}s`;
 
-      message.reply({
-        body: msg,
-        attachment: gifStream
+      const cpuUsage = os.cpus().reduce((acc, curr) => acc + curr.times.user, 0) / os.cpus().length;
+      const totalMemoryGB = os.totalmem() / 1024 ** 3;
+      const freeMemoryGB = os.freemem() / 1024 ** 3;
+      const usedMemoryGB = totalMemoryGB - freeMemoryGB;
+
+      const allUsers = await usersData.getAll();
+      const allThreads = await threadsData.getAll();
+      const currentDate = new Date();
+      const date = currentDate.toLocaleDateString("en-US");
+      const time = currentDate.toLocaleTimeString("en-US", {
+        timeZone: "Asia/Kolkata",
+        hour12: true,
       });
 
-    } catch (err) {
-      message.reply("faild to load attachment but here is your information:\n\n" + msg);
+      const timeStart = Date.now();
+      await api.sendMessage("🔎 Checking system info...", event.threadID);
+      const ping = Date.now() - timeStart;
+
+      let pingStatus = "⛔ Bad System";
+      if (ping < 1000) pingStatus = "✅ Smooth System";
+
+      const systemInfo = `♡   ∩_∩
+（„• ֊ •„)♡
+╭─∪∪────────────⟡
+│ 𝗨𝗣𝗧𝗜𝗠𝗘 𝗜𝗡𝗙𝗢
+├───────────────⟡
+│ ⏰ Runtime: ${uptimeFormatted}
+│ OS: ${os.type()} ${os.arch()}
+│ CPU: ${os.cpus()[0].model}
+│ Storage: ${usedMemoryGB.toFixed(2)} GB / ${totalMemoryGB.toFixed(2)} GB
+│ CPU Usage: ${cpuUsage.toFixed(1)}%
+│ RAM: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(1)} MB
+├───────────────⟡
+│ 📆 Date: ${date}
+│ ⏱️ Time: ${time}
+│ 👥 Users: ${allUsers.length}
+│ 🧵 Threads: ${allThreads.length}
+│ 📡 Ping: ${ping}ms
+│ Status: ${pingStatus}
+╰───────────────⟡`;
+
+      // Media from catbox (video)
+      let attachment = null;
+      const mediaUrl = "https://files.catbox.moe/9nx2wx.mp4";
+
+      if (mediaUrl.endsWith(".jpg") || mediaUrl.endsWith(".png") || mediaUrl.endsWith(".mp4")) {
+        const response = await axios.get(mediaUrl, { responseType: "stream" });
+        attachment = response.data;
+      }
+
+      api.sendMessage(
+        {
+          body: systemInfo,
+          attachment,
+        },
+        event.threadID,
+      );
+    } catch (error) {
+      console.error("System info error:", error);
+      api.sendMessage("⚠️ Could not retrieve system information.", event.threadID);
     }
-  }
+  },
 };
