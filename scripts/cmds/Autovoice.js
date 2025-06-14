@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
 	config: {
 		name: "audio",
-		version: "1.0",
+		version: "1.1",
 		author: "AceGun",
 		countDown: 5,
 		role: 0,
@@ -16,7 +16,7 @@ module.exports = {
 	onChat: async function ({ event, message }) {
 		if (event.body) {
 			const word = event.body.toLowerCase();
-			const folderPath = path.join(__dirname, "noprefix"); // Folder where MP3s are stored
+			const folderPath = path.join(__dirname, "noprefix");
 
 			const audioResponses = {
 				"🐒": { text: "কিরে বানর তোর কি হলো🐒", file: "banortor.mp3" },
@@ -30,13 +30,28 @@ module.exports = {
 				"😙": { text: "লুচ্চামি ছাড় 🙂", file: "cumah.mp3" },
 				"🍼": { text: "ফিডার খাও বাবু 😺", file: "fider.mp3" },
 				"🤰": { text: "এইটা তুমি কি করলা বাবু", file: "pregnant.mp3" },
-				"🐰": { text: "খরগোশ 😘", file: "korgus.mp3" }
+				"🐰": { text: "খরগোশ 😘", file: "korgus.mp3" },
+				"😡": { text: "রাগ কোরো না 😡", file: "angry.mp3" },
+				"😹": { text: "এইভাবে? 😹", file: "Evabe8.mp3" },
+				"🤫": { text: "শান্ত হও 😶", file: "sorom.mp3" },
+				"😂": { text: "পাগল নাকি? 😂", file: "pagolnaki.mp3" },
+				"🙈": { text: "লজ্জা পাস? 🙈", file: "sorom.mp3" },
+				"😳": { text: "শরমে পরে গেছি 😳", file: "sorom.mp3" },
+				"🥲": { text: "সরি বল 😢", file: "sale.mp3" },
+				"😮": { text: "ওয়াও! 😮", file: "ragkoro.mp3" },
+				"🤐": { text: "চুপ করো 😶", file: "sabdan.mp3" },
+				"😈": { text: "ডাক কিসের? 😈", file: "dakoknogo.mp3" },
+				"👀": { text: "কি দেখছো? 👀", file: "jhal.mp3" },
+				"🤭": { text: "সরম পাচ্ছো? 🤭", file: "sorom.mp3" },
+				"😵": { text: "ভেতরে যা হইসে! 😵", file: "datcokcok.mp3" },
+				"🥴": { text: "আমি কি ভুত? 🥴", file: "amikivut.mp3" },
+				"🤯": { text: "মাথা গরম 🤯", file: "amiotmkonk.mp3" },
+				"🙃": { text: "উল্টাপাল্টা করো না 🙃", file: "yamate.mp3" }
 			};
 
 			if (audioResponses[word]) {
 				const filePath = path.join(folderPath, audioResponses[word].file);
 
-				// Check if file exists before sending
 				if (fs.existsSync(filePath)) {
 					return message.reply({
 						body: `「 ${audioResponses[word].text} 」`,
