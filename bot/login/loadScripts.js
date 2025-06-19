@@ -228,7 +228,7 @@ module.exports = async function (_0x423297, _0xce5d8c, _0x543fe1, _0x40a3c5, _0x
           'error': _0x5326e4
         });
       }
-      loading.info("ＮＩＲＯＢ - BOT LOADED", '' + colors.Green('' + _0x41c646) + (_0x43777d.length ? ", " + colors.red('' + _0x43777d.length) : ''));
+      loading.info("ＮＩＲＯＢ - BOT LOADED", '' + colors.green('' + _0x41c646) + (_0x43777d.length ? ", " + colors.red('' + _0x43777d.length) : ''));
     }
     console.log("\r");
     if (_0x43777d.length > 0) {
