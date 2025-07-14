@@ -57,7 +57,7 @@ module.exports = {
     response.data.on("end", () => {
       api.sendMessage(
         {
-          body: "「 Here is your aniblur avatar 🥰 」\n\n author: MR᭄﹅ MAHABUB﹅ メꪜ",
+          body: "「 Here is your aniblur avatar 🥰 」\n\n author: ＮＩＲＯＢ ",
           attachment: fs.createReadStream(filePath),
         },
         event.threadID,
