@@ -6,10 +6,12 @@ const catboxImages = [
   "https://files.catbox.moe/c6ujy4.jpg",
   "https://files.catbox.moe/ueiep7.jpg",
   "https://files.catbox.moe/5wytj0.jpg",
+  "https://files.catbox.moe/ueiep7.jpg", // Replace or add valid image URLs
+  "https://files.catbox.moe/6mckih.mp4"
 ];
 
 // Split array into n parts evenly
-function splitArray(arr, parts = 4) {
+function splitArray(arr, parts = 6) {
   const len = arr.length;
   const out = [];
   let i = 0;
@@ -23,19 +25,19 @@ function splitArray(arr, parts = 4) {
 module.exports = {
   config: {
     name: "help",
-    version: "1.0",
+    version: "2.0",
     author: "Nirob ꨄ︎",
     countDown: 5,
     role: 0,
     shortDescription: {
-      en: "N I R O B - BOT help menu, split into 4 pages!",
+      en: "N I R O B - BOT help menu, split into 6 pages!",
     },
     longDescription: {
-      en: "Shows commands with pastel style and catbox images on 4 pages.",
+      en: "Shows commands with pastel style and catbox images on 6 pages.",
     },
     category: "info",
     guide: {
-      en: "{pn} [1-4]",
+      en: "{pn} [1-6]",
     },
     priority: 1,
   },
@@ -45,10 +47,9 @@ module.exports = {
     let page = 1;
     if (args.length > 0) {
       const p = parseInt(args[0]);
-      if (p >= 1 && p <= 4) page = p;
+      if (p >= 1 && p <= 6) page = p;
     }
 
-    // Filter commands by user role
     const availableCommands = [];
     for (const [name, cmd] of commands) {
       if (cmd.config.role > role) continue;
@@ -56,14 +57,11 @@ module.exports = {
     }
     availableCommands.sort();
 
-    // Split commands into 4 pages
-    const splitCommands = splitArray(availableCommands, 4);
+    const splitCommands = splitArray(availableCommands, 6);
     const commandsOnPage = splitCommands[page - 1] || [];
 
-    // Compose message style
-    let msg = `╭──────────── HELP MENU ══ Page ${page} ────────╮\n\n`;
+    let msg = `╭──────────── 𝙷𝙴𝙻𝙿 𝙼𝙴𝙽𝚄 ══ Page ${page} ────────╮\n\n`;
 
-    // Group commands by category for nicer display
     const categories = {};
     for (const cmdName of commandsOnPage) {
       const cmd = commands.get(cmdName) || commands.get(aliases.get(cmdName));
@@ -81,10 +79,9 @@ module.exports = {
     }
 
     msg += `╰───────────────────────────────╯  \n`;
-    msg += `Use "${prefix}help ${page === 4 ? 1 : page + 1}" to see more commands!\n`;
+    msg += `Use "${prefix}help ${page === 6 ? 1 : page + 1}" to see more commands!\n`;
     msg += `𝙳𝚎𝚟: 𝙽𝚒𝚛𝚘𝚋 ꨄ︎\n`;
 
-    // Send with catbox image for this page
     const imgUrl = catboxImages[page - 1];
     await message.reply({
       body: msg,
@@ -95,4 +92,4 @@ module.exports = {
 
 function capitalize(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
-         }
+}
